@@ -11,7 +11,7 @@ function getFolderData(path) {
   let dirs = [path];
   const childDirsDataPromises = [];
   return new Promise(async (resolve, reject) => {
-    const dirData = await fsReadDir(path).catch((err) => { console.log(`Error occurred during reading path ${path} . Error : ${err.message}`); });
+    const dirData = await fsReadDir(path).catch((err) => { console.log(`Error occurred during reading path ${path} . Error : ${err.message}`); reject(); });
     if (dirData.length > 0) {
       // dir is not empty
       // collecting info about files in current dir
@@ -19,12 +19,12 @@ function getFolderData(path) {
       for (let i = 0; i < dirData.length; i += 1) {
         dirDataPromises.push(fsStat(`${path}/${dirData[i]}`));
       }
-      const dirDataStats = await Promise.all(dirDataPromises).catch((err) => { console.log(`Failed to collect stats about files in dir ${path}.Error : ${err.message}`); });
+      const dirDataStats = await Promise.all(dirDataPromises).catch((err) => { console.log(`Failed to collect stats about files in dir ${path}.Error : ${err.message}`); reject(); });
 
       // filling files and dirs arrays
       for (let j = 0; j < dirDataStats.length; j += 1) {
         if (dirDataStats[j].isDirectory()) {
-          //dirs.push(`${path}/${dirData[j]}`);
+          // for dir making recursive call, dive deeper....
           childDirsDataPromises.push(getFolderData(`${path}/${dirData[j]}`));
         } else {
           // is file
@@ -33,17 +33,18 @@ function getFolderData(path) {
       }
 
       if (childDirsDataPromises.length === 0) {
-        resolve({dirs,files});
+        // we dont have dirs on this level... returning
+        resolve({ dirs, files });
       } else {
-        // for dirs making recursive call and looking inside it
-        // so waiting answer here
-        const childData = await Promise.all(childDirsDataPromises).catch((err) => { console.log(`Error occurred in recursive call. ${err.message}`); });
+        // we have dirs here ... waiting for async call with result for all dirs on this level
+        const childData = await Promise.all(childDirsDataPromises).catch((err) => { console.log(`Error occurred in recursive call. ${err.message}`); reject(); });
 
-        for (let a=0; a<childData.length; a+=1){
+        for (let a = 0; a < childData.length; a += 1) {
+          // combining this level data with recursive call data from deeper levels...
           dirs = dirs.concat(childData[a].dirs);
           files = files.concat(childData[a].files);
         }
-        resolve({dirs,files});
+        resolve({ dirs, files });
       }
     } else {
       // folder is empty
