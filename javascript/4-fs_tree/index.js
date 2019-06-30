@@ -48,7 +48,7 @@ function getFolderData(path) {
       }
     } else {
       // folder is empty
-      resolve({ files: [], dirs });
+      resolve({ files, dirs });
     }
   });
 }
