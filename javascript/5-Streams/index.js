@@ -31,7 +31,7 @@ function getTransformStream() {
     writableObjectMode: true,
 
     transform(chunk, encoding, callback) {
-      const data = chunk.toString() + randomNumberGenerator('transformStream');
+      const data = (+chunk.toString() + (+randomNumberGenerator('transformStream'))).toString();
 
       // Push the data onto the readable queue.
       callback(null, data);
