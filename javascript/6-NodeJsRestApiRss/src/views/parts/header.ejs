@@ -1,0 +1,59 @@
+<!-- views/parts/header.ejs -->
+<head>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.11/moment-timezone-with-data.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <meta name="ROBOTS" content="NOINDEX">
+</head>
+<script>
+    function GetClock(){
+        let d= moment().tz("Europe/Moscow").format('MMM DD HH:mm:ss');
+
+
+        document.getElementById('clockbox').innerHTML="Moscow : "+d+" | ";
+    }
+
+    window.onload=function(){
+        GetClock();
+        setInterval(GetClock,1000);
+    }
+</script>
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">
+                <span class="glyphicon glyphicon glyphicon-home"></span>
+            </a>
+        </div>
+
+        <%if (params.authenticated){%>
+        <ul class="nav navbar-nav">
+            <li><a href="/rss">RSS</a></li>
+        </ul>
+    <%}%>
+            <% if (!params.authenticated) { %>
+            <ul class="nav pull-right navbar-nav">
+                <li><a href="/signup">Sign Up</a></li>
+                <li><a href="/login">Sign In</a></li>
+            </ul>
+            <% } else { %>
+
+            <ul class="nav pull-right navbar-nav">
+
+                <li><a href="/logout">Sign Out</a></li>
+                <ul>
+                    <% } %>
+                </ul>
+            </ul>
+
+            <ul class="nav pull-right navbar-nav">
+                <li id="clockbox"  style="font:14pt Arial; color:#777;padding-top: 15px;padding-bottom: 15px;"> Msk : </li>
+            </ul>
+
+
+    </div>
+
+</nav>

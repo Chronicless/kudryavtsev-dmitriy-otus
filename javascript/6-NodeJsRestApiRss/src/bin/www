@@ -1,0 +1,98 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+const http = require('http');
+const config = require('../config');
+const logger = require('../logger').getlogger('bin.www');
+const app = require('../index');
+
+
+function normalizePort(val) {
+  const port = parseInt(val, 10);
+
+  // eslint-disable-next-line no-restricted-globals
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+const port = normalizePort(config.getAppPort());
+const httpServer = http.createServer(app);
+/**
+ * Get port from environment and store in Express.
+ */
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  const bind = typeof port === 'string'
+    ? `Pipe ${port}`
+    : `Port ${port}`;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      logger.error(`${bind} requires elevated privileges`);
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      logger.error(`${bind} is already in use`);
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  const addr = httpServer.address();
+  const bind = typeof addr === 'string'
+    ? `pipe ${addr}`
+    : `port ${addr.port}`;
+  logger.info(`Listening on ${bind}`);
+}
+
+const shutdown = function shutdown() {
+  logger.info('Got shutdown signal');
+  httpServer.close(() => {
+    logger.info('Done');
+    process.exit();
+  });
+};
+
+/**
+ * Create HTTP server.
+ */
+
+httpServer.listen(port, config.getHostname(), onListening);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+httpServer.on('error', onError);
+httpServer.on('close', shutdown);
