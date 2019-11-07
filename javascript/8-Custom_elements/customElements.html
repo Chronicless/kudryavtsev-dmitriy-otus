@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CustomElements HW</title>
+</head>
+<body>
+<script>
+  function createCustomElement(elementName, renderFunction) {
+    customElements.define(elementName, class extends HTMLElement {
+      constructor() {
+        super();
+        this.attachShadow({mode: 'open'});
+      }
+      connectedCallback() {
+        let data = Function('return (' + this.getAttribute('data') + ')')();
+        this.shadowRoot.innerHTML = renderFunction(data);
+      }
+    });
+  }
+  createCustomElement('my-tree', data => {
+    if (!data.items) {
+      throw new DOMException('Element my-tree not have data.items!')
+    }
+    let content = data.items.reduce((accum, elem) => {
+      let currElement = JSON.stringify(elem);
+      return accum + ((elem.items && elem.items.length) ?
+        `<my-tree data=${currElement}>${elem.id}</my-tree>` :
+        `<my-leaf data=${currElement}>${elem.id}</my-leaf>`)
+    }, '');
+    return `
+            <style>
+                .tree-elem {
+                    display: inline-grid;
+                    position: relative;
+                    background-color: saddlebrown;
+                    border: 1px dashed greenyellow;
+                    color: whitesmoke;
+                    padding: 15px;
+                    margin: 15px;
+                }
+                .tree-name {
+                    position: relative;
+                    color: whitesmoke;
+
+                }
+            </style>
+            <div class=tree-elem>
+                <div class=tree-name> Root element = ${data.id}</div>
+                ${content}
+            </div>`;
+  });
+  createCustomElement('my-leaf', element => {
+    return `
+            <style>
+                .leaf {
+                    display: inline-grid;
+                    border-radius: 20%;
+                    background-color: green;
+                    color: whitesmoke;
+                     padding: 15px;
+                    margin: 15px;
+                }
+                }
+            </style>
+            <div class=leaf>Leaf ${element.id}</div>
+            `;
+  });
+</script>
+
+<my-tree data="{'id':1,'items':[{'id':11,'items':[{'id':111}]},{'id':12,'items':[{'id':121,items:[{'id':1211}]},{'id':122}]}]}">
+</my-tree>
+</body>
+</html>
