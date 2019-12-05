@@ -1,0 +1,27 @@
+{
+  "name": "weather_with_router",
+  "version": "1.0.0",
+  "description": "Routing для приложения погоды Реализовать компонент фильтра и поиска городов. Данные по городам сохранять в браузерном хранилище. Добавить страницу погоды по конкретному городу. При переходе на нее должен меняться url, показываться информация на несколько дней вперед.",
+  "main": "index.js",
+  "scripts": {
+    "start": "./node_modules/.bin/webpack-dev-server"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/preset-env": "^7.7.4",
+    "@babel/preset-react": "^7.7.4",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.2.1",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
+    "style-loader": "^1.0.1",
+    "webpack": "^4.41.2"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^3.9.0"
+  }
+}
