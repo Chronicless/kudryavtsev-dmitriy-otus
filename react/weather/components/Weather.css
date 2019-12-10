@@ -1,0 +1,33 @@
+
+.Wind {
+    font-size: larger;
+    margin-bottom: 10px;
+    flex: 1 100%;
+
+}
+.Temperature {
+    flex: 1 100%;
+
+}
+
+.Humidity {
+    flex: 1 100%;
+    align-items: center;
+}
+
+.Pressure {
+    flex: 1 40%;
+
+}
+
+.Weather {
+    display: flex;
+    text-align: left;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 15px;
+    margin-left: 15px;
+    margin-right: 15px;
+    background: aquamarine;
+    flex-direction: row;
+}
