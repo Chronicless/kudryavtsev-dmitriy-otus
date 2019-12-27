@@ -1,0 +1,52 @@
+<!-- views/pages/index.ejs -->
+
+<!DOCTYPE html>
+<html lang="en/US">
+<head>
+    <% include ../parts/head %>
+
+
+</head>
+<body class="container">
+
+<header>
+    <% include ../parts/header %>
+</header>
+
+<main>
+    <img src="<%=linkContent.linkData.title%>">
+    <table class="table" id="tbl_notes">
+        <tbody>
+        <% if ( linkContent &&  linkContent.linkContent.length>0){%>
+            <% for (let i in linkContent.linkContent){ const element = linkContent.linkContent[i]%>
+
+            <tr >
+
+                <td >
+                    <span style="float: left;padding-right: 5px;color: #a2a2a2;display: inline-block;"  ><h3><a href="<%=element.link%>"><%= element.title%></a></h3></span>
+                    <div style="margin-top: 4px!important;margin-bottom: 15px!important; font-size: 12px; color: #bbb;  color: #6a6a6a; float: left; clear: both;line-height: 1.429rem;padding-left: 6px;">
+
+                        <span style="float: left;padding-left: 5px;color: #a2a2a2;display: inline-block;"  ><%= element.description%></span>
+                    </div>
+                    <div style="margin-top: 4px!important;margin-bottom: 15px!important; font-size: 12px; color: #bbb;  color: #6a6a6a; float: right; clear: both;line-height: 1.429rem;padding-right: 6px;">
+                        <span style="float: left; padding-left: 10px;padding-right: 10px!important;  color: #bfbfbf;">Added at:</span>
+                        <span style="float: left;margin-right: 5px;background: url(//img.zohostatic.com/crm/images/svgicons_c5b46_.svg) no-repeat -152px -295px;width: 13px; height: 13px;margin-top: -2px;"></span><%= moment(element.created_at).format('YYYY-MM-DD HH:mm:ss')%></span>
+                        <span style="float: left;padding-right: 5px;color: #a2a2a2;display: inline-block;" data-title="<%= moment(element.created_at).format('YYYY-MM-DD HH:mm:ss')%>">
+                    </div>
+
+                </td>
+            </tr>
+
+        <%}}%>
+        <tr></tr>
+        </tbody>
+
+    </table>
+</main>
+
+<footer>
+    <% include ../parts/footer %>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!-- views/pages/index.ejs -->
+
+<!DOCTYPE html>
+<html lang="en/US">
+<head>
+    <% include ../parts/head %>
+
+    <link href="/static/signin.css" rel="stylesheet">
+    <script>
+        function addNewLink(){
+          $('#add')[0].innerHTML = 'Processing...';
+          const url = $('#newRssLink').val();
+          $.ajax({
+            url: "/rss",
+            data: {url},
+            type: 'POST',
+            dataType: 'json',
+            error: function (error) {
+              console.log(error);
+              alert(error.responseJSON.error);
+              $('#add')[0].innerHTML = 'Failed...';
+              setTimeout(()=> {
+                $('#add')[0].innerHTML = '<span class="glyphicon glyphicon-search"></span>&nbsp;Add';
+              },2000)
+            },
+            success: function (result) {
+             window.location.reload();
+            }
+
+          });
+
+        }
+
+        function openRss(id){
+          document.location.href = `/rss/${id}`;
+        }
+    </script>
+</head>
+<body class="container">
+
+<header>
+    <% include ../parts/header %>
+</header>
+
+<main>
+    <br>
+    <br>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="jumbotron text-center">
+                <h2>Add new RSS link</h2>
+
+                    <div class="col-md-6 col-md-offset-3">
+                        <div class="input-group input-group-lg">
+                            <input type="text" class="form-control" id="newRssLink" placeholder="Put your link here">
+                            <span style="padding:5px 0px 5px 0px !important" class="input-group-addon">
+                                <button class="btn btn-primary btn-block" onclick="addNewLink()" id="add"><span class="glyphicon glyphicon-search"></span>&nbsp;Add</button></span>
+                        </div>
+                    </div>
+
+                <br>
+                <br>
+            </div>
+        </div>
+    </div>
+
+
+
+    <% if (rssLinks.length>0) {%>
+        <table class="table">
+            <thead>
+            <td class="col-md-6"></td>
+            <td class="col-md-6">Title</td>
+
+            <td></td>
+            </thead>
+            <tbody>
+            <% rssLinks.forEach((link) => { %>
+                <tr>
+                    <td><img src="<%=link.image.url%>"></td>
+                    <td><%= link.title%></td>
+                    <td><button class="btn btn-primary" onclick="openRss('<%=link._id%>')"> Open</button></td>
+
+                </tr>
+            <%})%>
+            </tbody>
+        </table>
+
+    <%} else {%>
+    <div style="text-align: center;"><h3 >You dont have any rss links yet</h3></div>
+    <%}%>
+</main>
+
+<footer>
+    <% include ../parts/footer %>
+</footer>
+
+</body>
+</html>
